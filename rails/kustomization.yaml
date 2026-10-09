@@ -1,0 +1,24 @@
+# Lab 5: the right-sized shop plus safety rails.
+# Apply with: kubectl apply -k rails
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: shop
+resources:
+  - ../app/rightsized
+  - guardrails.yaml
+patches:
+  - target: { kind: Deployment, name: "gateway|checkout" }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/priorityClassName
+        value: shop-critical
+  - target: { kind: Deployment, name: "catalog|cart" }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/priorityClassName
+        value: shop-standard
+  - target: { kind: Deployment, name: worker }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/priorityClassName
+        value: shop-batch

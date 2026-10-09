@@ -1,0 +1,15 @@
+# The "before" state: every service got the same copy-pasted resources block.
+# 9 pods x 400m CPU needs 3.6 cores of requests. Each app node has ~900m free,
+# so only 2 pods fit per node: 8 run across all 4 nodes and 1 stays Pending.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base
+patches:
+  - target: { kind: Deployment }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests: { cpu: 400m, memory: 256Mi }
+          limits: { cpu: "1", memory: 512Mi }

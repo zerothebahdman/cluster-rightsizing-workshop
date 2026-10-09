@@ -1,0 +1,31 @@
+# Namespace plus one headless Service per app. Headless, so the load generator
+# can resolve and drive every individual pod.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+---
+apiVersion: v1
+kind: Service
+metadata: { name: gateway }
+spec: { clusterIP: None, selector: { app: gateway }, ports: [{ port: 8080 }] }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: catalog }
+spec: { clusterIP: None, selector: { app: catalog }, ports: [{ port: 8080 }] }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: cart }
+spec: { clusterIP: None, selector: { app: cart }, ports: [{ port: 8080 }] }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: checkout }
+spec: { clusterIP: None, selector: { app: checkout }, ports: [{ port: 8080 }] }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: worker }
+spec: { clusterIP: None, selector: { app: worker }, ports: [{ port: 8080 }] }

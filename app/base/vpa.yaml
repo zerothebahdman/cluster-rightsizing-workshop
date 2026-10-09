@@ -1,0 +1,38 @@
+# One VerticalPodAutoscaler per service, in recommendation-only mode.
+# updateMode "Off": VPA watches and recommends, but never restarts a pod.
+# These live in the base so they exist from setup onwards and keep their history
+# across every overlay change.
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata: { name: gateway }
+spec:
+  targetRef: { apiVersion: apps/v1, kind: Deployment, name: gateway }
+  updatePolicy: { updateMode: "Off" }
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata: { name: catalog }
+spec:
+  targetRef: { apiVersion: apps/v1, kind: Deployment, name: catalog }
+  updatePolicy: { updateMode: "Off" }
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata: { name: cart }
+spec:
+  targetRef: { apiVersion: apps/v1, kind: Deployment, name: cart }
+  updatePolicy: { updateMode: "Off" }
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata: { name: checkout }
+spec:
+  targetRef: { apiVersion: apps/v1, kind: Deployment, name: checkout }
+  updatePolicy: { updateMode: "Off" }
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata: { name: worker }
+spec:
+  targetRef: { apiVersion: apps/v1, kind: Deployment, name: worker }
+  updatePolicy: { updateMode: "Off" }

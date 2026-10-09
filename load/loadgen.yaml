@@ -1,0 +1,68 @@
+# Load generator. Every INTERVAL seconds it asks each shop pod (via resource-consumer's
+# API) to burn a fixed amount of CPU and hold a fixed amount of memory.
+# That gives every attendee the same, realistic-looking usage curve.
+# It runs on the platform node so it never competes with the app for node capacity.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: load
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loadgen
+  namespace: load
+data:
+  # <service> <cpu millicores per pod> <memory MB per pod>
+  profiles: |
+    gateway 60 40
+    catalog 90 60
+    cart 30 30
+    checkout 50 40
+    worker 150 80
+  loadgen.sh: |
+    #!/bin/sh
+    INTERVAL=60
+    pod_ips() {
+      nslookup "$1.shop.svc.cluster.local" 2>/dev/null \
+        | awk '/^Name:/ {found=1} found && /^Address/ {print $2}'
+    }
+    while true; do
+      while read -r svc cpu mem; do
+        [ -z "$svc" ] && continue
+        for ip in $(pod_ips "$svc"); do
+          curl -s -m 3 -o /dev/null --data "millicores=${cpu}&durationSec=${INTERVAL}" "http://${ip}:8080/ConsumeCPU" &
+          curl -s -m 3 -o /dev/null --data "megabytes=${mem}&durationSec=${INTERVAL}" "http://${ip}:8080/ConsumeMem" &
+        done
+      done < /config/profiles
+      wait
+      echo "$(date -u +%H:%M:%S) load cycle sent"
+      sleep "$INTERVAL"
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgen
+  namespace: load
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: loadgen } }
+  template:
+    metadata: { labels: { app: loadgen } }
+    spec:
+      nodeSelector: { node-role: platform }
+      tolerations:
+        - { key: dedicated, value: platform, effect: NoSchedule }
+      containers:
+        - name: loadgen
+          image: curlimages/curl:8.11.1
+          command: ["/bin/sh", "/config/loadgen.sh"]
+          resources:
+            requests: { cpu: 20m, memory: 32Mi }
+            limits: { memory: 64Mi }
+          volumeMounts:
+            - { name: config, mountPath: /config }
+      volumes:
+        - name: config
+          configMap: { name: loadgen }

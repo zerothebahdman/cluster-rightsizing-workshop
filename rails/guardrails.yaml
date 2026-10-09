@@ -1,0 +1,55 @@
+# Safety rails for densely packed nodes (Lab 5).
+
+# Priority: when space runs out, the scheduler evicts lower-priority pods first.
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata: { name: shop-critical }
+value: 1000
+description: "Customer-facing request path: gateway, checkout."
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata: { name: shop-standard }
+value: 500
+description: "Supporting services: catalog, cart."
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata: { name: shop-batch }
+value: 10
+description: "Background work that can wait: worker."
+---
+# Disruption budgets: a drain or upgrade may only take one replica down at a time.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: { name: gateway }
+spec:
+  maxUnavailable: 1
+  selector: { matchLabels: { app: gateway } }
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: { name: checkout }
+spec:
+  maxUnavailable: 1
+  selector: { matchLabels: { app: checkout } }
+---
+# Defaults for any container that arrives without resources.
+apiVersion: v1
+kind: LimitRange
+metadata: { name: defaults }
+spec:
+  limits:
+    - type: Container
+      defaultRequest: { cpu: 50m, memory: 64Mi }
+      default: { memory: 128Mi }
+---
+# A namespace budget: the bloat can't creep back unnoticed.
+apiVersion: v1
+kind: ResourceQuota
+metadata: { name: shop-budget }
+spec:
+  hard:
+    requests.cpu: 2500m
+    requests.memory: 3Gi
+    pods: "40"

@@ -1,0 +1,34 @@
+# The reference answer for Lab 3: requests sized from measured usage plus headroom,
+# memory limit = memory request, and no CPU limit.
+# Totals: 920m CPU and 1024Mi memory for 9 pods, which fits on 2 of the 4 app nodes.
+# Your own numbers from ./tools/vpa-report.sh should land close to these.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base
+patches:
+  - target: { kind: Deployment, name: gateway }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value: { requests: { cpu: 80m, memory: 96Mi }, limits: { memory: 96Mi } }
+  - target: { kind: Deployment, name: catalog }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value: { requests: { cpu: 110m, memory: 128Mi }, limits: { memory: 128Mi } }
+  - target: { kind: Deployment, name: cart }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value: { requests: { cpu: 40m, memory: 64Mi }, limits: { memory: 64Mi } }
+  - target: { kind: Deployment, name: checkout }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value: { requests: { cpu: 70m, memory: 96Mi }, limits: { memory: 96Mi } }
+  - target: { kind: Deployment, name: worker }
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value: { requests: { cpu: 180m, memory: 160Mi }, limits: { memory: 160Mi } }

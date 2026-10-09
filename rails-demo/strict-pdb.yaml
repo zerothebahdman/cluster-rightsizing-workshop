@@ -1,0 +1,11 @@
+# A PodDisruptionBudget that is too strict, on purpose (Lab 5, step 1).
+# minAvailable equals the replica count, so no checkout pod may ever be evicted,
+# and any node running one can never be drained.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: checkout-too-strict
+  namespace: shop
+spec:
+  minAvailable: 2
+  selector: { matchLabels: { app: checkout } }

@@ -1,0 +1,93 @@
+# The five "shop" services. Each runs Kubernetes' resource-consumer test image,
+# and the load generator (load/) drives every pod to a fixed CPU and memory
+# profile, so everyone in the room sees the same numbers.
+# Resources are deliberately absent here: the overlays (bloated/, rightsized/) set them.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels: { app: gateway }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: gateway } }
+  template:
+    metadata: { labels: { app: gateway } }
+    spec:
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/resource-consumer:1.13
+          ports: [{ containerPort: 8080 }]
+          readinessProbe: { tcpSocket: { port: 8080 }, periodSeconds: 5 }
+          resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  labels: { app: catalog }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: catalog } }
+  template:
+    metadata: { labels: { app: catalog } }
+    spec:
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/resource-consumer:1.13
+          ports: [{ containerPort: 8080 }]
+          readinessProbe: { tcpSocket: { port: 8080 }, periodSeconds: 5 }
+          resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart
+  labels: { app: cart }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: cart } }
+  template:
+    metadata: { labels: { app: cart } }
+    spec:
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/resource-consumer:1.13
+          ports: [{ containerPort: 8080 }]
+          readinessProbe: { tcpSocket: { port: 8080 }, periodSeconds: 5 }
+          resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout
+  labels: { app: checkout }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: checkout } }
+  template:
+    metadata: { labels: { app: checkout } }
+    spec:
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/resource-consumer:1.13
+          ports: [{ containerPort: 8080 }]
+          readinessProbe: { tcpSocket: { port: 8080 }, periodSeconds: 5 }
+          resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels: { app: worker }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: worker } }
+  template:
+    metadata: { labels: { app: worker } }
+    spec:
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/resource-consumer:1.13
+          ports: [{ containerPort: 8080 }]
+          readinessProbe: { tcpSocket: { port: 8080 }, periodSeconds: 5 }
+          resources: {}
