@@ -7,7 +7,7 @@ onto half the nodes, and add the safety rails that keep dense packing from causi
 
 Runs entirely in **Google Cloud Shell**: free, no credit card, nothing to install.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/YOUR-GITHUB-USER/cut-your-cluster&cloudshell_tutorial=tutorial.md&show=terminal)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/zerothebahdman/cut-your-cluster&cloudshell_tutorial=tutorial.md&show=terminal)
 
 ## Start
 
@@ -17,7 +17,7 @@ Runs entirely in **Google Cloud Shell**: free, no credit card, nothing to instal
 Prefer to do it by hand? In any Cloud Shell:
 
 ```bash
-git clone https://github.com/YOUR-GITHUB-USER/cut-your-cluster
+git clone https://github.com/zerothebahdman/cut-your-cluster
 cd cut-your-cluster
 ./setup.sh
 ```
