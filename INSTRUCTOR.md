@@ -48,7 +48,7 @@ Run-of-show, pre-event checklist and failure playbook for the 90-minute session 
 | Symptom | Fix |
 |---|---|
 | `setup.sh` fails creating the cluster | `./cleanup.sh && ./setup.sh` |
-| Cloud Shell disconnected | Reconnect, `cd cut-your-cluster`, `./setup.sh`. It re-uses the cluster and keeps the attendee's lab state. |
+| Cloud Shell disconnected | Reconnect, `cd cluster-rightsizing-workshop`, `./setup.sh`. It re-uses the cluster and keeps the attendee's lab state. |
 | Cloud Shell VM was recycled (cluster gone) | `./catchup.sh <lab>`: it runs setup first, ~4 min |
 | `waste-report.sh`: "No metrics yet" | metrics-server needs ~1 minute after setup; retry |
 | `vpa-report.sh` shows "no data yet" | VPA needs a few minutes of load; carry on with Lab 1 and come back |
