@@ -151,15 +151,22 @@ deploy_workloads() {
   ok "Shop deployed: $(running_pods "") pods running"
 }
 
+# Runs one setup step and prints how long it took, so slow steps are easy to spot.
+step() {
+  local start; start=$(date +%s)
+  "$@"
+  printf '    \033[2m(%s: %ss)\033[0m\n' "$1" "$(( $(date +%s) - start ))"
+}
+
 main() {
   local start; start=$(date +%s)
   preflight
-  create_cluster
-  label_nodes
-  move_system_pods
-  install_metrics_server
-  install_vpa_recommender
-  deploy_workloads
+  step create_cluster
+  step label_nodes
+  step move_system_pods
+  step install_metrics_server
+  step install_vpa_recommender
+  step deploy_workloads
   printf '\n'
   ok "Setup finished in $(( $(date +%s) - start ))s. You're ready for Lab 1."
 }

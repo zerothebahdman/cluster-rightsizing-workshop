@@ -172,6 +172,15 @@ kubectl top pods -n shop -l app=worker
 It wants about 150m, but it's stuck near 50m. Nothing crashed: it just got slow.
 **Throttling is a quiet failure**, which is why CPU limits deserve caution.
 
+Want proof? Ask the kernel how often it paused the container:
+
+```bash
+kubectl exec -n shop deploy/worker -- cat /sys/fs/cgroup/cpu.stat
+```
+
+`nr_throttled` out of `nr_periods` is how many 100ms slices it was throttled in. In
+rehearsal it was more than half of them. `throttled_usec` is the total time it spent waiting.
+
 Reset to the right-sized state before the next lab:
 
 ```bash

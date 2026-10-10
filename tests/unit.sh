@@ -59,9 +59,17 @@ test_waste_table() {
   assert_eq "explains the Pending marker" "1" "$(grep -c 'Pending pod' <<< "${table}")"
 }
 
+test_waste_table_without_pending() {
+  local table
+  table=$(printf '%s\n' "gateway|Running|80|96|61|47" "cart|Running|40|64|38|34" | waste_table)
+  assert_eq "no Pending marker on any row" "0" "$(grep -c '\*' <<< "${table}")"
+  assert_eq "no Pending footnote" "0" "$(grep -c 'Pending pod' <<< "${table}")"
+}
+
 test_cpu_to_m
 test_mem_to_mi
 test_waste_table
+test_waste_table_without_pending
 
 printf '%d passed, %d failed\n' "${passes}" "${failures}"
 (( failures == 0 ))

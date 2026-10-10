@@ -13,7 +13,7 @@ function waste(req, used) {
 NF >= 6 {
   if (!($1 in pods)) order[++n] = $1
   pods[$1]++
-  if ($2 == "Pending") pending[$1]++
+  if ($2 == "Pending") { pending[$1]++; pending_total++ }
   rc[$1] += $3; rm[$1] += $4; uc[$1] += $5; um[$1] += $6
 }
 
@@ -22,10 +22,10 @@ END {
   printf fmt, "SERVICE", "PODS", "CPU REQ", "CPU USED", "WASTE", "MEM REQ", "MEM USED", "WASTE"
   for (i = 1; i <= n; i++) {
     a = order[i]
-    p = pods[a] (pending[a] ? "*" : "")
+    p = pods[a] ((a in pending) ? "*" : "")   # "in" test: reading pending[a] would create it
     printf fmt, a, p, rc[a] "m", uc[a] "m", waste(rc[a], uc[a]), rm[a] "Mi", um[a] "Mi", waste(rm[a], um[a])
     trc += rc[a]; tuc += uc[a]; trm += rm[a]; tum += um[a]
   }
   printf fmt, "TOTAL", "", trc "m", tuc "m", waste(trc, tuc), trm "Mi", tum "Mi", waste(trm, tum)
-  for (a in pending) { print "\n* includes a Pending pod: it has a request but no node to run on."; break }
+  if (pending_total > 0) print "\n* includes a Pending pod: it has a request but no node to run on."
 }
