@@ -12,8 +12,10 @@ Run-of-show, pre-event checklist and failure playbook for the 90-minute session 
 - [ ] Update the slide 13 table with the real numbers from the e2e report's Lab 1 waste report.
 - [ ] Check `kubectl version`: Cloud Shell's kubectl (1.35 at last check) is outside the supported skew for a 1.37
       cluster. It worked in the spikes, but if anything odd shows up, pin the node image to a version within one minor of kubectl.
-- [ ] Confirm the pinned node image still pulls: `docker pull kindest/node:v1.37.0@sha256:a1ed56cf...`
-      (full digest in `lib/common.sh`).
+- [ ] In a restarted Cloud Shell, run `./tests/registry-check.sh`. The ghcr.io node image should pull in
+      well under a minute (20s on 2026-10-10, vs 4-11 min through Docker Hub's mirror). If you change
+      the node image version, update the workflow, re-run it (`gh workflow run mirror-node-image.yml`),
+      and update `NODE_IMAGE` in `lib/common.sh`.
 - [ ] GKE demo: activate the GCP free trial on your own account, run through `gke/README.md` once, then delete the cluster.
 
 **The day before**

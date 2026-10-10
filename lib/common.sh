@@ -10,8 +10,10 @@ readonly REPO_ROOT
 
 readonly CLUSTER_NAME="workshop"
 readonly KUBE_CONTEXT="kind-${CLUSTER_NAME}"
-# Verified in Cloud Shell on 2026-10-10 (spike v2). Re-check the week before the event.
-readonly NODE_IMAGE="kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5"
+# kindest/node:v1.37.0, copied to ghcr.io by .github/workflows/mirror-node-image.yml.
+# Cloud Shell pulls it from ghcr.io in ~20s vs 4-11 min via Docker Hub's mirror
+# (tests/registry-check.sh, 2026-10-10). Same digest, so it is the identical image.
+readonly NODE_IMAGE="ghcr.io/zerothebahdman/kind-node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5"
 readonly METRICS_SERVER_VERSION="v0.7.2"
 readonly VPA_TAG="vertical-pod-autoscaler-1.3.0"
 
