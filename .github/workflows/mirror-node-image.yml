@@ -1,0 +1,44 @@
+# Copies the pinned kind node image from Docker Hub to GitHub's registry (ghcr.io).
+# Pulling the ~1 GB image through Google's Docker Hub mirror took 4-11 minutes in
+# Cloud Shell; ghcr.io serves it directly. The copy keeps the exact same digest.
+# Run manually: gh workflow run mirror-node-image.yml
+name: Mirror kind node image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  CRANE_VERSION: v0.20.2
+  SOURCE: docker.io/kindest/node@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5
+  TARGET: ghcr.io/${{ github.repository_owner }}/kind-node:v1.37.0
+
+jobs:
+  mirror:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install crane (checksum verified)
+        run: |
+          base="https://github.com/google/go-containerregistry/releases/download/${CRANE_VERSION}"
+          curl -fsSLO "${base}/go-containerregistry_Linux_x86_64.tar.gz"
+          curl -fsSLO "${base}/checksums.txt"
+          sha256sum --ignore-missing -c checksums.txt
+          tar -xzf go-containerregistry_Linux_x86_64.tar.gz crane
+          sudo install -m 0755 crane /usr/local/bin/crane
+
+      - name: Log in to ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | crane auth login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Copy image (all platforms, digest preserved)
+        run: crane copy "${SOURCE}" "${TARGET}"
+
+      - name: Verify digest matches
+        run: |
+          expected="${SOURCE#*@}"
+          actual="$(crane digest "${TARGET}")"
+          echo "expected ${expected}"
+          echo "actual   ${actual}"
+          test "${expected}" = "${actual}"
