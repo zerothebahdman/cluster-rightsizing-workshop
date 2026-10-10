@@ -46,8 +46,8 @@ main() {
   docker_hub_rate_limit
 
   log "Pull times (each image removed first)"
-  timed_pull "node image via mirror.gcr.io" "mirror.gcr.io/kindest/node@${NODE_DIGEST}"
-  timed_pull "node image via Docker Hub" "docker.io/kindest/node@${NODE_DIGEST}"
+  timed_pull "node image via ghcr.io" "ghcr.io/zerothebahdman/kind-node@${NODE_DIGEST}"
+  timed_pull "node image via Docker Hub (mirror)" "docker.io/kindest/node@${NODE_DIGEST}"
   timed_pull "curl image via mirror.gcr.io" "mirror.gcr.io/${CURL_IMAGE}"
   timed_pull "curl image via Docker Hub" "docker.io/${CURL_IMAGE}"
 
