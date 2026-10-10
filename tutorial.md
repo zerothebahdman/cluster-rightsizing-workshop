@@ -179,7 +179,7 @@ kubectl exec -n shop deploy/worker -- cat /sys/fs/cgroup/cpu.stat
 ```
 
 `nr_throttled` out of `nr_periods` is how many 100ms slices it was throttled in. In
-rehearsal it was more than half of them. `throttled_usec` is the total time it spent waiting.
+rehearsals it was 60–99% of them. `throttled_usec` is the total time it spent waiting.
 
 Reset to the right-sized state before the next lab:
 
