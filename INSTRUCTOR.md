@@ -1,6 +1,6 @@
 # Instructor notes
 
-Run-of-show, pre-event checklist and failure playbook for the 90-minute session (~30 attendees).
+Run-of-show, pre-event checklist and failure playbook. The DevFest Abuja 2026 slot is a **25-minute talk with a live demo**; the 90-minute hands-on version is kept below for longer slots.
 
 ## Pre-event checklist
 
@@ -28,7 +28,29 @@ Run-of-show, pre-event checklist and failure playbook for the 90-minute session 
 - [ ] Have the `gke/` demo cluster created (it takes ~5 minutes) if you're doing the live GKE demo.
 - [ ] Open the slides, the tutorial and a terminal side by side.
 
-## Run of show
+## Run of show: 25-minute talk (DevFest Abuja 2026)
+
+You drive the demo; attendees watch and run the labs later from the repo. In the Google Slides deck,
+slides 5, 6, 7, 10, 11, 18, 19 and 21 are skipped (hidden in presentation mode, kept for the long version).
+
+- **30 minutes before:** `./setup.sh` in your own Cloud Shell, so load and VPA history build up.
+  If you rehearsed on it, `./catchup.sh 1` resets to the bloated state and keeps VPA history.
+
+| Time | Slides | What happens |
+|---|---|---|
+| 0–1:45 | 1–2 | Welcome, who you are |
+| 1:45–4:30 | 3–4 | 13% / 20% utilization; the bill is set by guessed requests |
+| 4:30–8 | 8–9 | Request, limit, usage; the scheduler packs requests, not usage |
+| 8–9 | 12 | The method, then switch to the terminal |
+| 9–11 | 13 | Demo: waste report (83%) and node view |
+| 11–12:30 | 14 | Demo: `./tools/vpa-report.sh` |
+| 12:30–15:30 | 15 | Demo: apply `app/rightsized`, drain worker4 and worker5: 4 → 2 nodes |
+| 15:30–17:30 | 16 | Demo: cart OOMKilled at 24Mi; explain throttling verbally |
+| 17:30–19:30 | 17 | Demo: re-apply `app/rightsized`, strict PDB blocks a dry-run drain; name the other rails |
+| 19:30–21:30 | 20 | Takeaways, including the GKE Autopilot line |
+| 21:30–25 | 22 | Thank you, QR codes (repo and LinkedIn), Q&A |
+
+## Run of show: 90-minute hands-on workshop
 
 | Time | Slides | What happens |
 |---|---|---|

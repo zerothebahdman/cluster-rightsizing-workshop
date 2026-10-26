@@ -1,6 +1,6 @@
 # Cut Your Cluster in Half
 
-**A hands-on Kubernetes right-sizing clinic.** DevFest Abuja 2026 workshop by Divinewill (ZERO) Okoro.
+**A hands-on Kubernetes right-sizing clinic.** From the DevFest Abuja 2026 talk by Divinewill (ZERO) Okoro: the talk shows it live, and this repo lets you run every lab yourself, at your own pace.
 
 Take a deliberately bloated five-service app, measure what it actually uses, right-size it
 onto half the nodes, and add the safety rails that keep dense packing from causing outages.
