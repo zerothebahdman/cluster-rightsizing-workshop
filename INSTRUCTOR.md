@@ -30,8 +30,8 @@ Run-of-show, pre-event checklist and failure playbook. The DevFest Abuja 2026 sl
 
 ## Run of show: 25-minute talk (DevFest Abuja 2026)
 
-You drive the demo; attendees watch and run the labs later from the repo. In the Google Slides deck,
-slides 5, 6, 7, 10, 11, 18, 19 and 21 are skipped (hidden in presentation mode, kept for the long version).
+You drive the demo; attendees watch and run the labs later from the repo. The talk deck has 14 slides;
+the full 22-slide deck is kept as a separate "90-minute workshop" copy in Google Drive.
 
 - **30 minutes before:** `./setup.sh` in your own Cloud Shell, so load and VPA history build up.
   If you rehearsed on it, `./catchup.sh 1` resets to the bloated state and keeps VPA history.
@@ -40,17 +40,19 @@ slides 5, 6, 7, 10, 11, 18, 19 and 21 are skipped (hidden in presentation mode, 
 |---|---|---|
 | 0–1:45 | 1–2 | Welcome, who you are |
 | 1:45–4:30 | 3–4 | 13% / 20% utilization; the bill is set by guessed requests |
-| 4:30–8 | 8–9 | Request, limit, usage; the scheduler packs requests, not usage |
-| 8–9 | 12 | The method, then switch to the terminal |
-| 9–11 | 13 | Demo: waste report (83%) and node view |
-| 11–12:30 | 14 | Demo: `./tools/vpa-report.sh` |
-| 12:30–15:30 | 15 | Demo: apply `app/rightsized`, drain worker4 and worker5: 4 → 2 nodes |
-| 15:30–17:30 | 16 | Demo: cart OOMKilled at 24Mi; explain throttling verbally |
-| 17:30–19:30 | 17 | Demo: re-apply `app/rightsized`, strict PDB blocks a dry-run drain; name the other rails |
-| 19:30–21:30 | 20 | Takeaways, including the GKE Autopilot line |
-| 21:30–25 | 22 | Thank you, QR codes (repo and LinkedIn), Q&A |
+| 4:30–8 | 5–6 | Request, limit, usage; the scheduler packs requests, not usage |
+| 8–9 | 7 | The method, then switch to the terminal |
+| 9–11 | 8 | Demo: waste report (83%) and node view |
+| 11–12:30 | 9 | Demo: `./tools/vpa-report.sh` |
+| 12:30–15:30 | 10 | Demo: apply `app/rightsized`, drain worker4 and worker5: 4 → 2 nodes |
+| 15:30–17:30 | 11 | Demo: cart OOMKilled at 24Mi; explain throttling verbally |
+| 17:30–19:30 | 12 | Demo: re-apply `app/rightsized`, strict PDB blocks a dry-run drain; name the other rails |
+| 19:30–21:30 | 13 | Takeaways, including the GKE Autopilot line |
+| 21:30–25 | 14 | Thank you, QR codes (repo and LinkedIn), Q&A |
 
 ## Run of show: 90-minute hands-on workshop
+
+Slide numbers below refer to the 22-slide "90-minute workshop" deck.
 
 | Time | Slides | What happens |
 |---|---|---|
